@@ -1,24 +1,46 @@
 # Sandero Hub
 
-Sandero Hub is a first MVP of a dark, dashboard-style AI workspace built with **React + Vite**. It is intentionally powered by **demo/mock data** so the product can be shown, iterated on, and later connected to real integrations.
+Sandero Hub is a reduced-scope **React + Vite** MVP for a Replit-ready personal AI workspace.
 
-## Included in this MVP
+This version is intentionally small:
 
-- Project overview hero and KPI cards
-- Sidebar dashboard layout
-- Chat window
-- Task list
-- Memory / profile section
-- Activity log
-- Settings panel
+- exactly **4 tabs**: Chat, Tasks, Projects, Memory
+- exactly **3 exposed actions/concepts**: `summarize`, `create_task`, `draft_message`
+- lightweight **mock behavior only** so the UI is easy to demo and iterate on
+
+## What this MVP includes
+
+- A single-page app with four tab surfaces:
+  - Chat
+  - Tasks
+  - Projects
+  - Memory
+- Action demo panels for:
+  - `summarize`
+  - `create_task`
+  - `draft_message`
+- Mock chat responses that point users back to the three supported actions
+- Mock task creation that adds items to the Tasks tab
+- Mock message drafting shown in the Projects tab
+- Static memory notes to show the future shape of memory context
 - Responsive dark theme
-- English-only UI copy
+
+## Explicitly deferred for now
+
+These are **not implemented yet** in this MVP:
+
+- agenda
+- mail
+- document analysis
+- proactive suggestions
+- day start / day end flows
+- personal dashboards
 
 ## Tech stack
 
 - React 19
 - Vite 7
-- Plain CSS for a clean, self-contained setup
+- Plain CSS
 
 ## Run locally
 
@@ -40,16 +62,13 @@ npm run preview
 
 ## Replit notes
 
-This project is lightweight and Replit-friendly:
+This project stays Replit-friendly:
 
 - no backend required
 - no environment variables required
 - no external services required
-- mock data is stored directly in `src/App.jsx`
+- mock/demo data lives in `src/App.jsx`
 
-## Suggested next steps
+## Current product intent
 
-- Replace mock cards and chat data with live sources
-- Add routing if each area should become its own page
-- Connect Slack, calendar, tasks, and memory backends
-- Add authentication and persistent storage
+The goal of this version is to show the simplified shape of Sandero Hub before adding real integrations or broader workflows. It should be easy to understand in a quick demo: users can switch between four tabs and try exactly three actions.

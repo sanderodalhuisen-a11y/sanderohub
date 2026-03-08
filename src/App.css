@@ -2,7 +2,7 @@
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: #f3f7ff;
   background:
-    radial-gradient(circle at top, rgba(88, 114, 255, 0.18), transparent 30%),
+    radial-gradient(circle at top, rgba(88, 114, 255, 0.2), transparent 30%),
     linear-gradient(180deg, #0b1020 0%, #080b14 100%);
 }
 
@@ -19,12 +19,28 @@ body {
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
 }
 
 button {
   border: 0;
+}
+
+textarea,
+input {
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #eef3ff;
+  padding: 14px 16px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
 }
 
 #root {
@@ -41,6 +57,7 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 20px;
   padding: 28px 20px;
   background: rgba(6, 10, 18, 0.9);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
@@ -54,8 +71,7 @@ button {
   margin-bottom: 28px;
 }
 
-.brand-mark,
-.avatar {
+.brand-mark {
   display: grid;
   place-items: center;
   width: 52px;
@@ -69,11 +85,9 @@ button {
 .brand-card h1,
 .hero-panel h2,
 .panel h3,
-.task-card strong,
+.stack-card strong,
 .chat-meta strong,
-.profile-row strong,
-.setting-row strong,
-.activity-row strong {
+.sidebar-footer strong {
   margin: 0;
 }
 
@@ -91,14 +105,12 @@ button {
 }
 
 .nav-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
   width: 100%;
   padding: 14px 16px;
   border-radius: 16px;
   background: transparent;
   color: #d9e2ff;
+  text-align: left;
   cursor: pointer;
   transition: 0.2s ease;
 }
@@ -107,30 +119,6 @@ button {
 .nav-item.active {
   background: rgba(124, 140, 255, 0.14);
   color: #ffffff;
-}
-
-.sidebar-footer {
-  color: #8fa1c7;
-  font-size: 0.92rem;
-}
-
-.pulse-card {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(54, 209, 196, 0.12);
-  color: #c7fff8;
-}
-
-.status-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: #36d1c4;
-  box-shadow: 0 0 14px rgba(54, 209, 196, 0.7);
 }
 
 .dashboard {
@@ -144,86 +132,65 @@ button {
   box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
 }
 
+.mini-card {
+  padding: 18px;
+}
+
+.mini-card ul {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: #d7e2ff;
+}
+
+.hero-panel,
+.panel {
+  padding: 24px;
+}
+
 .hero-panel {
   display: flex;
   justify-content: space-between;
   gap: 24px;
-  padding: 28px;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
-.hero-copy {
-  max-width: 760px;
-  color: #b9c6e5;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.primary-button,
-.secondary-button {
-  padding: 12px 16px;
-  border-radius: 14px;
-  cursor: pointer;
-}
-
-.primary-button {
-  background: linear-gradient(135deg, #7c8cff, #5ce1d5);
-  color: #08101c;
-  font-weight: 700;
-}
-
-.secondary-button {
-  background: rgba(255, 255, 255, 0.06);
-  color: #e9efff;
-}
-
-.primary-button.small {
-  padding: 10px 14px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  margin-bottom: 22px;
-}
-
-.stat-card {
-  padding: 22px;
-}
-
-.stat-card p,
-.stat-card span,
-.profile-row p,
-.activity-row p,
-.sidebar-footer p,
-.setting-row span {
+.hero-copy,
+.stack-card p,
+.stack-card span,
+.helper-copy,
+.composer-box p,
+.chat-bubble p,
+.sidebar-footer li {
   margin: 0;
 }
 
-.stat-card p,
-.stat-card span {
-  color: #93a6cc;
+.hero-copy,
+.helper-copy,
+.stack-card p,
+.stack-card span,
+.composer-box,
+.muted-box,
+.sidebar-footer {
+  color: #b9c6e5;
 }
 
-.stat-card strong {
-  display: block;
-  margin: 10px 0 4px;
-  font-size: 2rem;
+.hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-end;
 }
 
-.content-grid {
+.action-grid,
+.tab-panels {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
   gap: 18px;
 }
 
-.panel {
-  padding: 22px;
+.action-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 18px;
 }
 
 .panel-heading {
@@ -231,7 +198,7 @@ button {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .badge {
@@ -246,116 +213,94 @@ button {
   background: rgba(255, 255, 255, 0.06);
 }
 
-.task-columns {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+.primary-button,
+.secondary-button {
+  padding: 12px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-top: 14px;
 }
 
-.task-column h4 {
-  margin: 0 0 12px;
-  color: #d7e2ff;
+.primary-button {
+  background: linear-gradient(135deg, #7c8cff, #5ce1d5);
+  color: #08101c;
+  font-weight: 700;
 }
 
-.task-card {
+.secondary-button {
+  background: rgba(255, 255, 255, 0.06);
+  color: #e9efff;
+}
+
+.result-box,
+.composer-box {
+  margin-top: 14px;
   padding: 16px;
-  margin-bottom: 12px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
 }
 
-.task-topline {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 10px;
-  font-size: 0.85rem;
-  color: #9fb1d8;
-}
-
-.chat-feed {
+.chat-feed,
+.stack-list {
   display: grid;
   gap: 14px;
-  margin-bottom: 18px;
 }
 
-.chat-bubble {
-  padding: 14px 16px;
+.chat-bubble,
+.stack-card {
+  padding: 16px;
   border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .chat-bubble.assistant {
   background: rgba(124, 140, 255, 0.12);
 }
 
-.chat-bubble.user {
-  background: rgba(255, 255, 255, 0.05);
-}
-
 .chat-meta {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
   margin-bottom: 8px;
   color: #b3c2e5;
 }
 
-.chat-bubble p {
-  margin: 0;
-  color: #eef3ff;
-}
-
-.chat-input {
+.chat-input-row {
   display: flex;
   gap: 12px;
+  margin-top: 16px;
 }
 
-.chat-input input {
-  flex: 1;
-  padding: 14px 16px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: #92a4c8;
+.chat-input-row .secondary-button {
+  margin-top: 0;
+  width: auto;
+  min-width: 96px;
 }
 
-.profile-row {
+.stack-card {
   display: flex;
-  gap: 14px;
-  align-items: center;
-  margin-bottom: 18px;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
 }
 
-.memory-list,
-.activity-list,
-.settings-list {
+.stack-card.vertical {
   display: grid;
-  gap: 12px;
+}
+
+.status-chip {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(54, 209, 196, 0.14);
+  color: #c7fff8;
+  white-space: nowrap;
 }
 
 .memory-list {
   margin: 0;
-  padding-left: 18px;
-  color: #d7e2ff;
-}
-
-.setting-row,
-.activity-row {
-  display: flex;
-  justify-content: space-between;
+  padding-left: 20px;
+  display: grid;
   gap: 12px;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.setting-row:last-child,
-.activity-row:last-child {
-  border-bottom: 0;
-}
-
-.activity-row > span {
-  min-width: 52px;
-  color: #7f93bb;
+  color: #d7e2ff;
 }
 
 @media (max-width: 1100px) {
@@ -364,15 +309,12 @@ button {
   }
 
   .sidebar {
-    gap: 24px;
     border-right: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  .content-grid,
-  .stats-grid,
-  .task-columns,
-  .hero-panel {
+  .hero-panel,
+  .action-grid {
     grid-template-columns: 1fr;
     flex-direction: column;
   }
@@ -385,11 +327,16 @@ button {
 
   .panel,
   .hero-panel,
-  .stat-card {
+  .mini-card {
     padding: 18px;
   }
 
-  .chat-input {
+  .chat-input-row,
+  .stack-card {
     flex-direction: column;
+  }
+
+  .chat-input-row .secondary-button {
+    width: 100%;
   }
 }
