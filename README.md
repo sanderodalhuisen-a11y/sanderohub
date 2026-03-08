@@ -68,6 +68,20 @@ This project stays Replit-friendly:
 - no environment variables required
 - no external services required
 - mock/demo data lives in `src/App.jsx`
+- includes a `.replit` file so Replit can boot it more easily
+
+### Import into Replit
+
+1. Create a new Repl from GitHub or upload this project folder.
+2. Wait for Replit to install dependencies.
+3. If it does not auto-run, use:
+
+```bash
+npm install
+npm run dev -- --host 0.0.0.0 --port 3000
+```
+
+4. Open the Replit web preview.
 
 ## Current product intent
 
