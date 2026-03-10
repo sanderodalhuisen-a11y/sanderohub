@@ -189,7 +189,7 @@ textarea {
 }
 
 .action-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-bottom: 18px;
 }
 
@@ -211,6 +211,16 @@ textarea {
 
 .badge.subtle {
   background: rgba(255, 255, 255, 0.06);
+}
+
+.badge.success {
+  background: rgba(54, 209, 196, 0.16);
+  color: #c7fff8;
+}
+
+.badge.danger {
+  background: rgba(255, 99, 132, 0.16);
+  color: #ffd4dd;
 }
 
 .primary-button,
@@ -301,6 +311,23 @@ textarea {
   display: grid;
   gap: 12px;
   color: #d7e2ff;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  color: #d7e2ff;
+}
+
+.toggle-row input {
+  width: auto;
+}
+
+.primary-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
 }
 
 @media (max-width: 1100px) {

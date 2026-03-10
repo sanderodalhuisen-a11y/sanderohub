@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 const tabs = ['Chat', 'Tasks', 'Projects', 'Memory']
@@ -26,9 +26,9 @@ const projects = [
     focus: 'Demonstrate the shape of the product without backend integrations yet.',
   },
   {
-    name: 'Deferred roadmap',
-    summary: 'Agenda, mail, document analysis, proactive suggestions, day flows, dashboards.',
-    focus: 'Explicitly out of scope for this build.',
+    name: 'Twin API backend',
+    summary: 'Thin Express layer for input intake, context retrieval, OpenClaw calls, and n8n webhooks.',
+    focus: 'Turns the demo into an integration-ready product skeleton.',
   },
 ]
 
@@ -43,7 +43,7 @@ const initialChat = [
     id: 1,
     role: 'assistant',
     label: 'Sandero Hub',
-    text: 'This MVP stays intentionally small: four tabs, three actions, and mock behavior only.',
+    text: 'This MVP stays intentionally small: four tabs, three actions, and now a thin Twin API backend layer.',
   },
   {
     id: 2,
@@ -79,11 +79,33 @@ function App() {
     'Draft message: Hi team — I simplified Sandero Hub to four tabs and three clear actions for the MVP. Please review the latest build and share feedback on what feels most useful.'
   )
   const [chatMessages, setChatMessages] = useState(initialChat)
+  const [twinInput, setTwinInput] = useState('Summarize the latest product direction and prep a follow-up workflow.')
+  const [triggerWorkflow, setTriggerWorkflow] = useState(false)
+  const [twinResult, setTwinResult] = useState(null)
+  const [apiHealth, setApiHealth] = useState({ status: 'checking' })
+  const [apiLoading, setApiLoading] = useState(false)
 
   const nextTaskId = useMemo(
     () => (taskList.length ? Math.max(...taskList.map((task) => task.id)) + 1 : 1),
     [taskList]
   )
+
+  useEffect(() => {
+    async function loadHealth() {
+      try {
+        const response = await fetch('/api/health')
+        const data = await response.json()
+        setApiHealth({ status: 'online', data })
+      } catch {
+        setApiHealth({
+          status: 'offline',
+          data: { message: 'Twin API offline. Start the backend to enable live calls.' },
+        })
+      }
+    }
+
+    loadHealth()
+  }, [])
 
   function handleSummarize() {
     const result = makeSummary(summaryInput)
@@ -151,10 +173,42 @@ function App() {
         id: current.length + 2,
         role: 'assistant',
         label: 'Sandero Hub',
-        text: 'Chat is a mock surface in this MVP. Use summarize, create_task, or draft_message to demonstrate the current product shape.',
+        text: 'Chat is still a lightweight surface in this MVP. Use summarize, create_task, draft_message, or the Twin API card to demo the current product shape.',
       },
     ])
     setChatInput('')
+  }
+
+  async function handleTwinQuery() {
+    setApiLoading(true)
+
+    try {
+      const response = await fetch('/api/twin/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input: twinInput, triggerWorkflow }),
+      })
+
+      const data = await response.json()
+      setTwinResult(data)
+      setChatMessages((current) => [
+        ...current,
+        {
+          id: current.length + 1,
+          role: 'assistant',
+          label: 'Twin API',
+          text: `Twin API → ${data.reply}`,
+        },
+      ])
+      setActiveTab('Chat')
+    } catch {
+      setTwinResult({
+        ok: false,
+        reply: 'Twin API request failed. Start the backend or check the Replit run command.',
+      })
+    } finally {
+      setApiLoading(false)
+    }
   }
 
   return (
@@ -185,11 +239,12 @@ function App() {
 
         <div className="sidebar-footer card mini-card">
           <p className="eyebrow">Current scope</p>
-          <strong>Only 3 actions exposed</strong>
+          <strong>UI + Twin API foundation</strong>
           <ul>
             {actions.map((action) => (
               <li key={action}>{action}</li>
             ))}
+            <li>twin_api</li>
           </ul>
         </div>
       </aside>
@@ -198,11 +253,10 @@ function App() {
         <section className="hero-panel card">
           <div>
             <p className="eyebrow">Reduced product shape</p>
-            <h2>Exactly four tabs. Exactly three demo actions.</h2>
+            <h2>Exactly four tabs. Three demo actions. One thin backend layer.</h2>
             <p className="hero-copy">
-              This MVP intentionally keeps only Chat, Tasks, Projects, and Memory.
-              Agenda, mail, document analysis, proactive suggestions, day start/day end,
-              and dashboards are deferred on purpose.
+              Sandero Hub now includes a small Twin API backend that can receive app input,
+              build context, call OpenClaw, trigger n8n webhooks, and return results to the UI.
             </p>
           </div>
           <div className="hero-pills" aria-label="Exposed actions">
@@ -211,6 +265,7 @@ function App() {
                 {action}
               </span>
             ))}
+            <span className="badge">twin_api</span>
           </div>
         </section>
 
@@ -272,6 +327,37 @@ function App() {
             </button>
             <div className="result-box">{draftMessage}</div>
           </article>
+
+          <article className="card panel twin-panel">
+            <div className="panel-heading">
+              <div>
+                <p className="eyebrow">Backend</p>
+                <h3>Twin API</h3>
+              </div>
+              <span className={`badge subtle ${apiHealth.status === 'online' ? 'success' : 'danger'}`}>
+                {apiHealth.status}
+              </span>
+            </div>
+            <textarea
+              value={twinInput}
+              onChange={(event) => setTwinInput(event.target.value)}
+              rows="5"
+            />
+            <label className="toggle-row">
+              <input
+                type="checkbox"
+                checked={triggerWorkflow}
+                onChange={(event) => setTriggerWorkflow(event.target.checked)}
+              />
+              Trigger n8n webhook too
+            </label>
+            <button type="button" className="primary-button" onClick={handleTwinQuery} disabled={apiLoading}>
+              {apiLoading ? 'Calling Twin API…' : 'Run Twin API'}
+            </button>
+            <div className="result-box">
+              {twinResult ? twinResult.reply : apiHealth.data?.message || 'Twin API health check pending.'}
+            </div>
+          </article>
         </section>
 
         <section className="tab-panels">
@@ -282,7 +368,7 @@ function App() {
                   <p className="eyebrow">Tab</p>
                   <h3>Chat</h3>
                 </div>
-                <span className="badge subtle">Mock assistant surface</span>
+                <span className="badge subtle">Assistant + backend demo surface</span>
               </div>
               <div className="chat-feed">
                 {chatMessages.map((message) => (
@@ -353,6 +439,12 @@ function App() {
                 <p className="eyebrow">Latest draft_message output</p>
                 <p>{draftMessage}</p>
               </div>
+              {twinResult?.context && (
+                <div className="composer-box muted-box">
+                  <p className="eyebrow">Latest Twin API context</p>
+                  <p>{twinResult.context.inputPreview || 'No preview available.'}</p>
+                </div>
+              )}
             </article>
           )}
 
@@ -372,8 +464,8 @@ function App() {
               </ul>
               <div className="composer-box muted-box">
                 <p>
-                  Future memory integrations can land here later, but this MVP keeps the
-                  surface lightweight and static.
+                  Future memory integrations can land here later. For now, the Twin API already
+                  exposes a small context retrieval step for demos and integration wiring.
                 </p>
               </div>
             </article>
